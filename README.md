@@ -1,67 +1,73 @@
 # 📱 SocioDigital
 
-Aplicativo mobile desenvolvido em **React Native (Expo)** com o objetivo de facilitar a **reserva de espaços comuns** como churrasqueiras e quadras em condomínios e residenciais. O app visa centralizar os agendamentos e permitir uma gestão mais prática para síndicos e moradores.
+Aplicativo mobile desenvolvido com **React Native** + **Expo** para **gerenciar reservas de espaços comunitários**, como churrasqueiras, quadras esportivas, salão de festas e mais.
 
----
+## 🛠 Tecnologias Utilizadas
 
-## 🚀 Funcionalidades
-
-- ✅ Login de usuários
-- ✅ Cadastro de novos usuários
-- ✅ Navegação entre telas
-- 🚧 Tela inicial com funcionalidades em desenvolvimento
-- 🚧 Sistema de reserva de espaços
-- 🚧 Integração futura com Google Calendar
-
----
-
-## 🛠️ Tecnologias Utilizadas
-
-- [React Native (Expo)](https://reactnative.dev/)
+- [Expo](https://expo.dev/)
+- [React Native](https://reactnative.dev/)
 - [React Navigation](https://reactnavigation.org/)
-- [Banco de Dados local]
-- [expo-calendar]
----
+- [AsyncStorage](https://docs.expo.dev/versions/latest/sdk/async-storage/)
+- [Expo Calendar](https://docs.expo.dev/versions/latest/sdk/calendar/)
+- [DateTimePicker](https://github.com/react-native-datetimepicker/datetimepicker)
 
-## 📁 Estrutura do Projeto
+## 🔒 Funcionalidades
 
-```
-SocioDigital/
-├── App.js
-├── db/
-│ └── bd.js
-├── src/
-│ └── screens/
-│ ├── TelaLogin.js
-│ ├── TelaRegistro.js
-│ └── TelaInicio.js
-├── assets/
-├── package.json
-```
+✅ Registro e login local com armazenamento de dados  
+✅ Cadastro de reservas com:
+- Seleção de espaço (ex: churrasqueira, quadra)
+- Escolha de **data**, **hora de início** e **hora de término**
 
+✅ Integração com o **calendário nativo do dispositivo**  
+✅ Armazenamento local de **reservas realizadas**  
+✅ Visualização de reservas anteriores
 
----
+## 📸 Telas do App
 
-## ▶️ Como Executar
+- Tela de **Login**
+- Tela de **Registro**
+- Tela **Principal** com:
+  - Reservas personalizadas
+  - Lista de reservas salvas
 
-### 1. Clone o repositório
+## 🚀 Como Executar
 
 ```bash
-git clone https://github.com/AndreLuisLopes/SocioDigital.git
-cd SocioDigital
-```
-### 2. Instale as dependências
+# 1. Clone o repositório
+git clone https://github.com/seu-usuario/sociodigital.git
+cd sociodigital
 
-```
-npm install 
-```
+# 2. Instale as dependências
+npm install
 
-### 3. Inicie o projeto
-```
+# 3. Inicie com o Expo
 npx expo start
 ```
-Use o Expo Go no seu celular para escanear o QR code e testar o app.
 
-## 👨‍💻 Autor
-Desenvolvido por André Luís Lopes
-🔗 [GitHub](https://github.com/AndreLuisLopes) • [Linkedin](https://www.linkedin.com/in/andre-luis-lopes/)
+Você pode escanear o QR code com o aplicativo **Expo Go** no seu celular para rodar o app!
+
+## 📂 Estrutura de Pastas
+
+```
+/screens
+  ├── login.js         # Tela de login
+  ├── registro.js      # Tela de registro
+  └── main.js          # Tela principal com calendário e reservas
+
+/database
+  └── bd.js            # Manipulação de AsyncStorage para usuários e reservas
+
+/App.js                # Navegação entre telas
+```
+
+## 📌 Futuras Melhorias
+
+- 🔁 Logout e troca de usuários
+- 🗑 Remover reservas da lista
+- 🌐 Integração com banco de dados online (Firebase, Supabase, etc.)
+- 📅 Tela de calendário visual com reservas do mês
+
+## 🧑‍💻 Autor
+
+Feito com 💙 por [André Luís Lopes](https://github.com/AndreLuisLopes)  
+Licenciado sob [MIT](LICENSE)
