@@ -10,6 +10,7 @@ Aplicativo mobile desenvolvido com **React Native** + **Expo** para **gerenciar 
 - [AsyncStorage](https://docs.expo.dev/versions/latest/sdk/async-storage/)
 - [Expo Calendar](https://docs.expo.dev/versions/latest/sdk/calendar/)
 - [DateTimePicker](https://github.com/react-native-datetimepicker/datetimepicker)
+- [Flask API Python](https://flask.palletsprojects.com/en/stable/)
 
 ## 🔒 Funcionalidades
 
@@ -19,8 +20,9 @@ Aplicativo mobile desenvolvido com **React Native** + **Expo** para **gerenciar 
 - Escolha de **data**, **hora de início** e **hora de término**
 
 ✅ Integração com o **calendário nativo do dispositivo**  
-✅ Armazenamento local de **reservas realizadas**  
+✅ Armazenamento de **reservas realizadas** em um banco de dados realizado pelo Flask  
 ✅ Visualização de reservas anteriores
+
 
 ## 📸 Telas do App
 
@@ -49,6 +51,9 @@ Você pode escanear o QR code com o aplicativo **Expo Go** no seu celular para r
 ## 📂 Estrutura de Pastas
 
 ```
+/services
+  ├── api.js          # Funções de enviar e listar
+
 /screens
   ├── login.js         # Tela de login
   ├── registro.js      # Tela de registro
@@ -64,7 +69,6 @@ Você pode escanear o QR code com o aplicativo **Expo Go** no seu celular para r
 
 - 🔁 Logout e troca de usuários
 - 🗑 Remover reservas da lista
-- 🌐 Integração com banco de dados online (Firebase, Supabase, etc.)
 - 📅 Tela de calendário visual com reservas do mês
 
 ## 🧑‍💻 Autor
