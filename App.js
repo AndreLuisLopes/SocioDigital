@@ -14,7 +14,7 @@ export default function App() {
       <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: true }}>
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Registro" component={RegisterScreen} />
-        <Stack.Screen name="Main" component={MainScreen} />
+        <Stack.Screen name="Main" component={MainScreen} options={{ title: 'Bem-vindo' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
