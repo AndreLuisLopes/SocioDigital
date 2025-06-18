@@ -57,8 +57,8 @@ Você pode escanear o QR code com o aplicativo **Expo Go** no seu celular para r
     ├── quadra.py                 # Rotas das Quadras
     ├── reservas.py               # Rotas das Reservas
     ├── salao.py                  # Rotas dos Salões de Festa
-├── app.py                        # Ponto de entrada da API
-├── db.py                         # Conexão com o banco
+  ├── app.py                        # Ponto de entrada da API
+  ├── db.py                         # Conexão com o banco
 
 /services
   ├── api.js          # Funções de enviar e listar
