@@ -56,7 +56,7 @@ Você pode escanear o QR code com o aplicativo **Expo Go** no seu celular para r
     ├── churrasqueira.py          # Rota das Churrasqueiras
     ├── quadra.py                 # Rotas das Quadras
     ├── reservas.py               # Rotas das Reservas
-    ├── salao.py                  # Rotas dos Salões de Festa
+    └── salao.py                  # Rotas dos Salões de Festa
   ├── app.py                        # Ponto de entrada da API
   ├── db.py                         # Conexão com o banco
 
