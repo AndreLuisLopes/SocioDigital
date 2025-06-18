@@ -61,7 +61,7 @@ Você pode escanear o QR code com o aplicativo **Expo Go** no seu celular para r
   ├── db.py                         # Conexão com o banco
 
 /services
-  ├── api.js          # Funções de enviar e listar
+  └── api.js          # Funções de enviar e listar
 
 /screens
   ├── login.js         # Tela de login
