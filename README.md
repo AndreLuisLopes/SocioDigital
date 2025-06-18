@@ -20,7 +20,7 @@ Aplicativo mobile desenvolvido com **React Native** + **Expo** para **gerenciar 
 - Escolha de **data**, **hora de início** e **hora de término**
 
 ✅ Integração com o **calendário nativo do dispositivo**  
-✅ Armazenamento de **reservas realizadas** em um banco de dados realizado pelo Flask  
+✅ Armazenamento de **reservas realizadas** em um banco de dados MySQL através do Flask  
 ✅ Visualização de reservas anteriores
 
 
@@ -51,6 +51,15 @@ Você pode escanear o QR code com o aplicativo **Expo Go** no seu celular para r
 ## 📂 Estrutura de Pastas
 
 ```
+/api
+  ├── rotas
+    ├── churrasqueira.py          # Rota das Churrasqueiras
+    ├── quadra.py                 # Rotas das Quadras
+    ├── reservas.py               # Rotas das Reservas
+    ├── salao.py                  # Rotas dos Salões de Festa
+├── app.py                        # Ponto de entrada da API
+├── db.py                         # Conexão com o banco
+
 /services
   ├── api.js          # Funções de enviar e listar
 
@@ -60,9 +69,11 @@ Você pode escanear o QR code com o aplicativo **Expo Go** no seu celular para r
   └── main.js          # Tela principal com calendário e reservas
 
 /database
-  └── bd.js            # Manipulação de AsyncStorage para usuários e reservas
+  └── bd.js            # Manipulação de AsyncStorage para usuários
 
 /App.js                # Navegação entre telas
+
+SocioDigital.sql       # Banco de Dados
 ```
 
 ## 📌 Futuras Melhorias
