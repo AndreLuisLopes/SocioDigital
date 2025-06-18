@@ -1,6 +1,6 @@
 # 📱 SocioDigital
 
-Aplicativo mobile desenvolvido com **React Native** + **Expo** para **gerenciar reservas de espaços comunitários**, como churrasqueiras, quadras esportivas, salão de festas e mais.
+Aplicativo mobile desenvolvido com **React Native** + **Expo** para **gerenciar reservas de espaços comunitários**, como churrasqueiras, quadras esportivas e salões de festas.
 
 ## 🛠 Tecnologias Utilizadas
 
