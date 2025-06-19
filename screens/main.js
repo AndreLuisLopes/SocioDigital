@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import * as Calendar from 'expo-calendar';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { adicionarReserva, listarReservas } from '../database/bd';
+import { enviarReservaAPI, listarReservasAPI } from '../services/api';
 
 const ESPACOS = ['Churrasqueira', 'Quadra', 'Salão de Festas'];
 
@@ -15,7 +15,7 @@ export default function MainScreen() {
   const [espaco, setEspaco] = useState(ESPACOS[0]);
   const [date, setDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(new Date(Date.now() + 60 * 60 * 1000)); // +1h
+  const [endTime, setEndTime] = useState(new Date(Date.now() + 60 * 60 * 1000));
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
@@ -39,8 +39,21 @@ export default function MainScreen() {
   };
 
   const carregarReservas = async () => {
-    const lista = await listarReservas();
-    setReservas(lista.reverse()); // mostrar a mais recente no topo
+    try {
+      const remoto = await listarReservasAPI();
+
+      const reservasAPI = remoto.map((reserva, index) => ({
+        id: 'api-' + index,
+        espaco: reserva.tipo_local.charAt(0).toUpperCase() + reserva.tipo_local.slice(1),
+        data: reserva.data_reserva,
+        horaInicio: reserva.horario_inicio.slice(0, 5),
+        horaFim: reserva.horario_fim.slice(0, 5),
+      }));
+
+      setReservas(reservasAPI.reverse());
+    } catch (error) {
+      Alert.alert('Erro', 'Falha ao carregar reservas');
+    }
   };
 
   const criarReserva = async () => {
@@ -75,7 +88,7 @@ export default function MainScreen() {
         horaFim: endDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
 
-      await adicionarReserva(reservaInfo);
+      await enviarReservaAPI(reservaInfo);
       Alert.alert('Sucesso!', `Reserva de ${espaco} criada!`);
       carregarReservas();
     } catch (error) {
