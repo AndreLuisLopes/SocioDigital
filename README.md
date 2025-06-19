@@ -1,18 +1,21 @@
-# 📱 SocioDigital
+# SocioDigital
 
 Aplicativo mobile desenvolvido com **React Native** + **Expo** para **gerenciar reservas de espaços comunitários**, como churrasqueiras, quadras esportivas e salões de festas.
 
-## 🛠 Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - [Expo](https://expo.dev/)
+- [Node.js](https://nodejs.org/pt)
 - [React Native](https://reactnative.dev/)
 - [React Navigation](https://reactnavigation.org/)
 - [AsyncStorage](https://docs.expo.dev/versions/latest/sdk/async-storage/)
 - [Expo Calendar](https://docs.expo.dev/versions/latest/sdk/calendar/)
 - [DateTimePicker](https://github.com/react-native-datetimepicker/datetimepicker)
 - [Flask API Python](https://flask.palletsprojects.com/en/stable/)
+- [mysql-connector-python](https://pypi.org/project/mysql-connector-python/)
+- [flask-cors](https://pypi.org/project/flask-cors/)
 
-## 🔒 Funcionalidades
+## Funcionalidades
 
 ✅ Registro e login local com armazenamento de dados  
 ✅ Cadastro de reservas com:
@@ -24,7 +27,7 @@ Aplicativo mobile desenvolvido com **React Native** + **Expo** para **gerenciar 
 ✅ Visualização de reservas anteriores
 
 
-## 📸 Telas do App
+## Telas do App
 
 - Tela de **Login**
 - Tela de **Registro**
@@ -32,7 +35,7 @@ Aplicativo mobile desenvolvido com **React Native** + **Expo** para **gerenciar 
   - Reservas personalizadas
   - Lista de reservas salvas
 
-## 🚀 Como Executar
+## Como Executar
 
 ```bash
 # 1. Clone o repositório
@@ -48,7 +51,7 @@ npx expo start
 
 Você pode escanear o QR code com o aplicativo **Expo Go** no seu celular para rodar o app!
 
-## 📂 Estrutura de Pastas
+## Estrutura de Pastas
 
 ```
 /api
@@ -76,13 +79,13 @@ Você pode escanear o QR code com o aplicativo **Expo Go** no seu celular para r
 SocioDigital.sql       # Banco de Dados
 ```
 
-## 📌 Futuras Melhorias
+## Futuras Melhorias
 
-- 🔁 Logout e troca de usuários
-- 🗑 Remover reservas da lista
-- 📅 Tela de calendário visual com reservas do mês
+- Logout e troca de usuários
+- Remover reservas da lista
+- Tela de calendário visual com reservas do mês
 
-## 🧑‍💻 Autor
+## Autor
 
-Feito com 💙 por [André Luís Lopes](https://github.com/AndreLuisLopes)  
+Feito por [André Luís Lopes](https://github.com/AndreLuisLopes)  
 Licenciado sob [MIT](LICENSE)
