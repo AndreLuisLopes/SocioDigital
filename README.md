@@ -17,14 +17,14 @@ Aplicativo mobile desenvolvido com **React Native** + **Expo** para **gerenciar 
 
 ## Funcionalidades
 
-✅ Registro e login local com armazenamento de dados  
-✅ Cadastro de reservas com:
-- Seleção de espaço (ex: churrasqueira, quadra)
-- Escolha de **data**, **hora de início** e **hora de término**
+- Registro e login local com armazenamento de dados  
+- Cadastro de reservas com:
+  - Seleção de espaço (ex: churrasqueira, quadra)
+  - Escolha de **data**, **hora de início** e **hora de término**
 
-✅ Integração com o **calendário nativo do dispositivo**  
-✅ Armazenamento de **reservas realizadas** em um banco de dados MySQL através do Flask  
-✅ Visualização de reservas anteriores
+- Integração com o **calendário nativo do dispositivo**  
+- Armazenamento de **reservas realizadas** em um banco de dados MySQL através do Flask  
+- Visualização de reservas anteriores
 
 
 ## Telas do App
