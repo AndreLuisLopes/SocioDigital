@@ -32,7 +32,25 @@ CREATE TABLE reserva (
   horario_fim TIME
 );
 
+CREATE TABLE usuario (
+	id INT auto_increment primary KEY,
+    nome varchar (100),
+    email varchar(100),
+    senha varchar(50)
+);
+
+CREATE TABLE clube (
+	id int auto_increment primary key,
+    nome varchar(100),
+    email varchar(100),
+	senha varchar(50)
+);
+
 select * from salao;
 select * from quadra;
 select * from churrasqueira;
 select * from reserva;
+select * from clube;
+select * from usuario;
+
+ALTER TABLE clube ADD COLUMN cep varchar(100);
