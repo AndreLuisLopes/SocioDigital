@@ -33,7 +33,7 @@ CREATE TABLE reserva (
 );
 
 CREATE TABLE usuario (
-    id INT auto_increment primary KEY,
+	id INT auto_increment primary KEY,
     nome varchar (100),
     email varchar(100),
     senha varchar(50)
@@ -54,3 +54,17 @@ select * from clube;
 select * from usuario;
 
 ALTER TABLE clube ADD COLUMN cep varchar(100);
+
+ALTER TABLE churrasqueira
+ADD COLUMN clube_id INT,
+ADD FOREIGN KEY (clube_id) REFERENCES clube(id);
+
+ALTER TABLE quadra
+ADD COLUMN clube_id INT,
+ADD FOREIGN KEY (clube_id) REFERENCES clube(id);
+
+ALTER TABLE salao
+ADD COLUMN clube_id INT,
+ADD FOREIGN KEY (clube_id) REFERENCES clube(id);
+
+ALTER TABLE reserva MODIFY tipo_local VARCHAR(100);
