@@ -4,16 +4,22 @@ import {
 } from 'react-native';
 import * as Calendar from 'expo-calendar';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { enviarReservaAPI, listarReservasAPI } from '../services/api';
-
-const ESPACOS = ['Churrasqueira', 'Quadra', 'Salão de Festas'];
+import {
+  enviarReservaAPI,
+  listarReservasAPI,
+  listarClubesAPI,
+  listarEspacosPorClubeAPI
+} from '../services/api';
 
 export default function MainScreen({ route }) {
   const { usuario } = route.params || {};
   const [calendarId, setCalendarId] = useState(null);
   const [reservas, setReservas] = useState([]);
+  const [clubes, setClubes] = useState([]);
+  const [clubeSelecionado, setClubeSelecionado] = useState(null);
+  const [espacos, setEspacos] = useState([]);
+  const [espacoSelecionado, setEspacoSelecionado] = useState(null);
 
-  const [espaco, setEspaco] = useState(ESPACOS[0]);
   const [date, setDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date(Date.now() + 60 * 60 * 1000));
@@ -29,8 +35,9 @@ export default function MainScreen({ route }) {
         const defaultCalendar = await getDefaultCalendarId();
         setCalendarId(defaultCalendar);
       }
+      await carregarClubes();
+      await carregarReservas();
     })();
-    carregarReservas();
   }, []);
 
   const getDefaultCalendarId = async () => {
@@ -39,23 +46,52 @@ export default function MainScreen({ route }) {
     return defaultCalendar?.id;
   };
 
-  const carregarReservas = async () => {
+  const carregarClubes = async () => {
     try {
-      const remoto = await listarReservasAPI();
-      const reservasAPI = remoto.map((reserva, index) => ({
-        id: 'api-' + index,
-        espaco: reserva.tipo_local.charAt(0).toUpperCase() + reserva.tipo_local.slice(1),
-        data: reserva.data_reserva,
-        horaInicio: reserva.horario_inicio.slice(0, 5),
-        horaFim: reserva.horario_fim.slice(0, 5),
-      }));
-      setReservas(reservasAPI.reverse());
+      const clubesAPI = await listarClubesAPI();
+      setClubes(clubesAPI);
     } catch (error) {
-      Alert.alert('Erro', 'Falha ao carregar reservas');
+      Alert.alert('Erro', 'Erro ao carregar clubes');
     }
   };
 
+  const carregarEspacosDoClube = async (clube) => {
+    try {
+      const todosEspacos = await listarEspacosPorClubeAPI();
+      const filtrados = todosEspacos.filter(e => e.clube_id === clube.id);
+      setEspacos(filtrados);
+      setClubeSelecionado(clube);
+      setEspacoSelecionado(null);
+    } catch (error) {
+      Alert.alert('Erro', 'Erro ao carregar espaços do clube');
+    }
+  };
+
+  const carregarReservas = async () => {
+  try {
+    const remoto = await listarReservasAPI();
+    const reservasAPI = remoto.map((reserva, index) => ({
+      id: reserva.id || 'api-' + index,
+      espaco: reserva.tipo_local && typeof reserva.tipo_local === 'string'
+        ? reserva.tipo_local.charAt(0).toUpperCase() + reserva.tipo_local.slice(1)
+        : (reserva.espaco || 'Espaço'),
+      data: reserva.data_reserva || '',
+      horaInicio: reserva.horario_inicio ? reserva.horario_inicio.slice(0, 5) : '',
+      horaFim: reserva.horario_fim ? reserva.horario_fim.slice(0, 5) : '',
+    }));
+    setReservas(reservasAPI.reverse());
+  } catch (error) {
+    Alert.alert('Erro', 'Falha ao carregar reservas');
+    console.error('Erro ao carregar reservas:', error);
+  }
+};
+
   const criarReserva = async () => {
+  if (!clubeSelecionado || !espacoSelecionado) {
+    Alert.alert('Selecione o clube e o espaço desejado.');
+    return;
+  }
+
   const startDate = new Date(date);
   startDate.setHours(startTime.getHours(), startTime.getMinutes());
 
@@ -67,21 +103,24 @@ export default function MainScreen({ route }) {
     return;
   }
 
+  const tipoLocalInferido = espacoSelecionado.tipo?.toLowerCase() || 'churrasqueira';
+
   const reservaInfo = {
-    id: Date.now(),
-    espaco,
-    data: date.toLocaleDateString(),
-    horaInicio: startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    horaFim: endDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-  };
+  usuario: usuario?.nome,
+  tipo_local: espacoSelecionado.tipo || espacoSelecionado.nome,
+  id_local: espacoSelecionado.id,
+  clube_id: clubeSelecionado.id,
+  data_reserva: date.toLocaleDateString('pt-BR'),
+  horario_inicio: startDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+  horario_fim: endDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+};
 
   try {
-    console.log("📦 Enviando reserva:", reservaInfo, "Usuário:", usuario?.nome);
     await enviarReservaAPI(reservaInfo, usuario?.nome);
 
     if (calendarId) {
       await Calendar.createEventAsync(calendarId, {
-        title: `Reserva: ${espaco}`,
+        title: `Reserva: ${espacoSelecionado.nome}`,
         startDate,
         endDate,
         timeZone: 'America/Sao_Paulo',
@@ -89,7 +128,7 @@ export default function MainScreen({ route }) {
       });
     }
 
-    Alert.alert('Sucesso!', `Reserva de ${espaco} criada!`);
+    Alert.alert('Sucesso!', `Reserva de ${espacoSelecionado.nome} criada!`);
     carregarReservas();
   } catch (error) {
     Alert.alert('Erro', 'Não foi possível criar a reserva: ' + error.message);
@@ -97,35 +136,48 @@ export default function MainScreen({ route }) {
 };
 
   const renderReserva = ({ item }) => (
-  <View style={styles.card}>
-    <Text style={styles.cardTitle}>{item.espaco}</Text>
-    <Text>
-      {item.data} — {item.horaInicio.replace(/:$/, '')} às {item.horaFim.replace(/:$/, '')}
-    </Text>
-  </View>
-);
+    <View style={styles.card}>
+      <Text style={styles.cardTitle}>{item.espaco}</Text>
+      <Text>{item.data} — {item.horaInicio} às {item.horaFim}</Text>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>SocioDigital</Text>
       {usuario?.nome && <Text style={{ textAlign: 'center', marginBottom: 10 }}>Bem-vindo(a), {usuario.nome}!</Text>}
-      <Text style={styles.description}>Selecione o espaço, data e horário para reservar:</Text>
-
-      <Text style={styles.subtitle}>Espaço:</Text>
+      <Text style={styles.subtitle}>Clube:</Text>
       <View style={styles.spaceContainer}>
-        {ESPACOS.map(opcao => (
+        {clubes.map(clube => (
           <TouchableOpacity
-            key={opcao}
-            style={[styles.spaceButton, espaco === opcao && styles.selectedSpace]}
-            onPress={() => setEspaco(opcao)}
+            key={clube.id}
+            style={[styles.spaceButton, clubeSelecionado?.id === clube.id && styles.selectedSpace]}
+            onPress={() => carregarEspacosDoClube(clube)}
           >
-            <Text style={espaco === opcao ? styles.selectedText : styles.spaceText}>{opcao}</Text>
+            <Text style={clubeSelecionado?.id === clube.id ? styles.selectedText : styles.spaceText}>{clube.nome}</Text>
           </TouchableOpacity>
         ))}
       </View>
 
+      {clubeSelecionado && (
+        <>
+          <Text style={styles.subtitle}>Espaço:</Text>
+          <View style={styles.spaceContainer}>
+            {espacos.map(espaco => (
+              <TouchableOpacity
+                key={espaco.nome}
+                style={[styles.spaceButton, espacoSelecionado?.nome === espaco.nome && styles.selectedSpace]}
+                onPress={() => setEspacoSelecionado(espaco)}
+              >
+                <Text style={espacoSelecionado?.nome === espaco.nome ? styles.selectedText : styles.spaceText}>{espaco.nome}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </>
+      )}
+
       <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.selectButton}>
-        <Text>Data: {date.toLocaleDateString()}</Text>
+        <Text>Data: {date.toLocaleDateString('pt-BR')}</Text>
       </TouchableOpacity>
       {showDatePicker && (
         <DateTimePicker value={date} mode="date" display="default" onChange={(_, d) => {
@@ -135,7 +187,7 @@ export default function MainScreen({ route }) {
       )}
 
       <TouchableOpacity onPress={() => setShowStartTimePicker(true)} style={styles.selectButton}>
-        <Text>Início: {startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+        <Text>Início: {startTime.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</Text>
       </TouchableOpacity>
       {showStartTimePicker && (
         <DateTimePicker value={startTime} mode="time" display="default" is24Hour onChange={(_, t) => {
@@ -145,7 +197,7 @@ export default function MainScreen({ route }) {
       )}
 
       <TouchableOpacity onPress={() => setShowEndTimePicker(true)} style={styles.selectButton}>
-        <Text>Término: {endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+        <Text>Término: {endTime.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</Text>
       </TouchableOpacity>
       {showEndTimePicker && (
         <DateTimePicker value={endTime} mode="time" display="default" is24Hour onChange={(_, t) => {
@@ -170,7 +222,6 @@ export default function MainScreen({ route }) {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20 },
   title: { fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 10 },
-  description: { textAlign: 'center', marginBottom: 15, fontSize: 15 },
   subtitle: { fontWeight: 'bold', marginBottom: 8, fontSize: 16 },
   spaceContainer: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', marginBottom: 15 },
   spaceButton: {

@@ -6,10 +6,16 @@ export default function Clube({ navigation, route }) {
   const clube = route?.params?.clube;
 
   return (
-    <View style={styles.container}>
+   <View style={styles.container}>
       {clube?.nome && (
         <Text style={{ textAlign: 'center', marginBottom: 10, fontSize: 24, fontWeight: 'bold' }}>
           Bem-vindo(a), {clube.nome}!
+        </Text>
+      )}
+
+      {clube?.id && (
+        <Text style={{ textAlign: 'center', marginBottom: 10, fontSize: 16 }}>
+          ID do Clube: {clube.id}
         </Text>
       )}
       <Text style={styles.subtitle}>Gerencie seus espaços aqui:</Text>
@@ -17,7 +23,7 @@ export default function Clube({ navigation, route }) {
       <View style={styles.buttonContainer}>
         <Button
           title="Cadastrar Espaço"
-          onPress={() => navigation.navigate('CadastroEspaco')}
+          onPress={() => navigation.navigate('CadastroEspaco', { clube_id: clube.id })}
         />
       </View>
     </View>
