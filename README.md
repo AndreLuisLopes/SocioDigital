@@ -23,15 +23,19 @@ Aplicativo mobile desenvolvido com **React Native** + **Expo** para **gerenciar 
   - Escolha de **data**, **hora de início** e **hora de término**
 
 - Integração com o **calendário nativo do dispositivo**  
-- Armazenamento de **reservas realizadas** em um banco de dados MySQL através do Flask  
+- Armazenamento de **reservas realizadas, registro e login de clubes e usuários** em um banco de dados MySQL através do Flask
+- Cadastro de **espaços** em banco de dados MySQL através do Flask  
 - Visualização de reservas anteriores
 
 
 ## Telas do App
 
-- Tela de **Login**
-- Tela de **Registro**
-- Tela **Principal** com:
+- Tela de **Iníco**
+- Tela de **Login de Usuário e de Clubes**
+- Tela de **Registro de Usário e de Clubes**
+- Tela **Main de clubes** com:
+  - Cadastro de Espaço: Quadras, Salões de festa e Churrasqueiras   
+- Tela **Main de usuários** com:
   - Reservas personalizadas
   - Lista de reservas salvas
 
@@ -59,6 +63,8 @@ Você pode escanear o QR code com o aplicativo **Expo Go** no seu celular para r
     ├── churrasqueira.py          # Rota das Churrasqueiras
     ├── quadra.py                 # Rotas das Quadras
     ├── reservas.py               # Rotas das Reservas
+    ├── usuario.py                # Rotas de Usuários
+    ├── clube.py                  # Rotas de Clubes
     └── salao.py                  # Rotas dos Salões de Festa
   ├── app.py                        # Ponto de entrada da API
   ├── db.py                         # Conexão com o banco
@@ -67,12 +73,14 @@ Você pode escanear o QR code com o aplicativo **Expo Go** no seu celular para r
   └── api.js          # Funções de enviar e listar
 
 /screens
-  ├── login.js         # Tela de login
-  ├── registro.js      # Tela de registro
-  └── main.js          # Tela principal com calendário e reservas
-
-/database
-  └── bd.js            # Manipulação de AsyncStorage para usuários
+  ├── login.js           # Tela de login
+  ├── registro.js        # Tela de registro
+  ├── HomeScreen.js      # Tela inicial
+  ├── registroClube.js   # Tela de Registro de Clubes
+  ├── loginClube.js      # Tela de Login de Clubes
+  ├── clube.js           # Tela de principal de Clubes
+  ├── cadastroEspaço.js  # Tela de Cadastro de espaços
+  └── main.js            # Tela principal com calendário e reservas
 
 /App.js                # Navegação entre telas
 
