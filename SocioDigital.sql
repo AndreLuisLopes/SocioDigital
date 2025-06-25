@@ -33,7 +33,7 @@ CREATE TABLE reserva (
 );
 
 CREATE TABLE usuario (
-	id INT auto_increment primary KEY,
+    id INT auto_increment primary KEY,
     nome varchar (100),
     email varchar(100),
     senha varchar(50)
