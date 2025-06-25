@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Alert, Text } from 'react-native';
-import { verificarLoginUsuarioAPI } from '../services/api';
+import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { verificarLoginClubeAPI } from '../services/api';
 
-export default function LoginScreen({ navigation }) {
+export default function LoginClube({ navigation }) {
   const [form, setForm] = useState({ email: '', senha: '' });
 
   const handleLogin = async () => {
-      try {
-        const res = await verificarLoginUsuarioAPI(form.email, form.senha);
-        navigation.replace('Main', { usuario: res.usuario });
-      } catch (error) {
-        Alert.alert('Erro', error.message || 'Falha ao fazer login');
-      }
-    };
+    try {
+      const res = await verificarLoginClubeAPI(form.email, form.senha);
+      navigation.replace('Clube', { clube: res.clube });
+    } catch (error) {
+      Alert.alert('Erro', error.message || 'Falha ao fazer login');
+    }
+  };
 
   return (
     <View style={styles.container}>
-
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -29,9 +28,8 @@ export default function LoginScreen({ navigation }) {
         secureTextEntry
         onChangeText={(v) => setForm({ ...form, senha: v })}
       />
-
       <Button title="Entrar" onPress={handleLogin} />
-      <Button title="Registrar-se" onPress={() => navigation.navigate('Registro')} />
+      <Button title="Registrar-se" onPress={() => navigation.navigate('RegistroClube')} />
     </View>
   );
 }
@@ -41,12 +39,5 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1, borderColor: '#ccc', borderRadius: 5,
     padding: 10, marginBottom: 10,
-  },
-  label: {
-    fontWeight: 'bold',
-    marginBottom: 5
-  },
-  picker: {
-    marginBottom: 15
   }
 });

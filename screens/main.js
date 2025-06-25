@@ -8,7 +8,8 @@ import { enviarReservaAPI, listarReservasAPI } from '../services/api';
 
 const ESPACOS = ['Churrasqueira', 'Quadra', 'Salão de Festas'];
 
-export default function MainScreen() {
+export default function MainScreen({ route }) {
+  const { usuario } = route.params || {};
   const [calendarId, setCalendarId] = useState(null);
   const [reservas, setReservas] = useState([]);
 
@@ -41,7 +42,6 @@ export default function MainScreen() {
   const carregarReservas = async () => {
     try {
       const remoto = await listarReservasAPI();
-
       const reservasAPI = remoto.map((reserva, index) => ({
         id: 'api-' + index,
         espaco: reserva.tipo_local.charAt(0).toUpperCase() + reserva.tipo_local.slice(1),
@@ -49,7 +49,6 @@ export default function MainScreen() {
         horaInicio: reserva.horario_inicio.slice(0, 5),
         horaFim: reserva.horario_fim.slice(0, 5),
       }));
-
       setReservas(reservasAPI.reverse());
     } catch (error) {
       Alert.alert('Erro', 'Falha ao carregar reservas');
@@ -57,55 +56,59 @@ export default function MainScreen() {
   };
 
   const criarReserva = async () => {
-    const startDate = new Date(date);
-    startDate.setHours(startTime.getHours(), startTime.getMinutes());
+  const startDate = new Date(date);
+  startDate.setHours(startTime.getHours(), startTime.getMinutes());
 
-    const endDate = new Date(date);
-    endDate.setHours(endTime.getHours(), endTime.getMinutes());
+  const endDate = new Date(date);
+  endDate.setHours(endTime.getHours(), endTime.getMinutes());
 
-    if (startDate >= endDate) {
-      Alert.alert('Erro', 'Horário de início deve ser antes do término.');
-      return;
-    }
+  if (startDate >= endDate) {
+    Alert.alert('Erro', 'Horário de início deve ser antes do término.');
+    return;
+  }
 
-    try {
-      if (calendarId) {
-        await Calendar.createEventAsync(calendarId, {
-          title: `Reserva: ${espaco}`,
-          location: `Espaço reservado - ${espaco}`,
-          startDate,
-          endDate,
-          timeZone: 'America/Sao_Paulo',
-          notes: `Reserva feita via app SocioDigital`,
-        });
-      }
-
-      const reservaInfo = {
-        id: Date.now(),
-        espaco,
-        data: date.toLocaleDateString(),
-        horaInicio: startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        horaFim: endDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      };
-
-      await enviarReservaAPI(reservaInfo);
-      Alert.alert('Sucesso!', `Reserva de ${espaco} criada!`);
-      carregarReservas();
-    } catch (error) {
-      Alert.alert('Erro', 'Não foi possível criar a reserva: ' + error.message);
-    }
+  const reservaInfo = {
+    id: Date.now(),
+    espaco,
+    data: date.toLocaleDateString(),
+    horaInicio: startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    horaFim: endDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
   };
 
+  try {
+    console.log("📦 Enviando reserva:", reservaInfo, "Usuário:", usuario?.nome);
+    await enviarReservaAPI(reservaInfo, usuario?.nome);
+
+    if (calendarId) {
+      await Calendar.createEventAsync(calendarId, {
+        title: `Reserva: ${espaco}`,
+        startDate,
+        endDate,
+        timeZone: 'America/Sao_Paulo',
+        notes: `Reserva feita pelo app SocioDigital`,
+      });
+    }
+
+    Alert.alert('Sucesso!', `Reserva de ${espaco} criada!`);
+    carregarReservas();
+  } catch (error) {
+    Alert.alert('Erro', 'Não foi possível criar a reserva: ' + error.message);
+  }
+};
+
   const renderReserva = ({ item }) => (
-    <View style={styles.card}>
-      <Text style={styles.cardTitle}>{item.espaco}</Text>
-      <Text>{item.data} — {item.horaInicio} às {item.horaFim}</Text>
-    </View>
-  );
+  <View style={styles.card}>
+    <Text style={styles.cardTitle}>{item.espaco}</Text>
+    <Text>
+      {item.data} — {item.horaInicio.replace(/:$/, '')} às {item.horaFim.replace(/:$/, '')}
+    </Text>
+  </View>
+);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>SocioDigital</Text>
+      {usuario?.nome && <Text style={{ textAlign: 'center', marginBottom: 10 }}>Bem-vindo(a), {usuario.nome}!</Text>}
       <Text style={styles.description}>Selecione o espaço, data e horário para reservar:</Text>
 
       <Text style={styles.subtitle}>Espaço:</Text>
