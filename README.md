@@ -95,5 +95,6 @@ SocioDigital.sql       # Banco de Dados
 
 ## Autor
 
-Feito por [André Luís Lopes](https://github.com/AndreLuisLopes)  
+Desenvolvido por André Luís Lopes
+[GitHub](https://github.com/AndreLuisLopes) • [Linkedin](https://www.linkedin.com/in/andre-luis-lopes/)  
 Licenciado sob [MIT](LICENSE)
